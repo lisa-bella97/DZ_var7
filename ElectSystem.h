@@ -6,7 +6,7 @@
 class ElectSystem
 {
 private:
-	bool _state; // true - проведение выборов
+	bool _state; // true - РїСЂРѕРІРµРґРµРЅРёРµ РІС‹Р±РѕСЂРѕРІ
 	map<string, Poll*> _polls;
 	map<string, Voter*> _candidates;
 	map<string, Voter*> _voters;
