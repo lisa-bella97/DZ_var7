@@ -9,10 +9,10 @@ using namespace std;
 
 class Poll;
 
-class Voter // Избиратель
+class Voter // РР·Р±РёСЂР°С‚РµР»СЊ
 {
 private:
-	string _id; // уникальный идентификатор избирателя
+	string _id; // СѓРЅРёРєР°Р»СЊРЅС‹Р№ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РёР·Р±РёСЂР°С‚РµР»СЏ
 	string _name;
 	Poll* _poll;
 	Voter* _candidate;
@@ -24,7 +24,7 @@ public:
 	void changePoll(Poll* poll) { _poll = poll; }
 };
 
-class Poll // Избирательный участок
+class Poll // РР·Р±РёСЂР°С‚РµР»СЊРЅС‹Р№ СѓС‡Р°СЃС‚РѕРє
 {
 private:
 	string _name;
