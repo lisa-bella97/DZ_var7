@@ -1,5 +1,29 @@
 #include "Poll.h"
 
+//******************** Voter ***********************************
+
+void Voter::vote(Voter * candidate)
+{
+	if (_candidate != nullptr)
+		throw  logic_error("No second time voting");
+	_candidate = candidate;
+}
+
+void Voter::showStatistics() const
+{
+	if (_candidate)
+		cout << _id << " chose " << _candidate->_id << endl;
+	else
+		cout << _id << " has not chosen anybody" << endl;
+}
+
+void Voter::print() const
+{
+	cout << _id << ' ' << _name << endl;
+}
+
+//******************** Poll ***********************************
+
 void Poll::addVoter(Voter * voter)
 {
 	if (_voters.count(voter->getID()) > 0)
@@ -27,4 +51,16 @@ void Poll::removeVoter(string id)
 void Poll::removeVoter(Voter * voter)
 {
 	removeVoter(voter->getID());
+}
+
+void Poll::showStatistics() const
+{
+	for (auto it = _voters.begin(); it != _voters.end(); it++)
+		it->second->showStatistics();
+}
+
+void Poll::printVoters() const
+{
+	for (auto it = _voters.begin(); it != _voters.end(); it++)
+		it->second->print();
 }
