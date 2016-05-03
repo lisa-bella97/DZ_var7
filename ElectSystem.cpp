@@ -80,6 +80,11 @@ void ElectSystem::addPoll(string name)
 	_polls.insert(pair<string, Poll*>(name, new Poll(name)));
 }
 
+void ElectSystem::removePoll(string name)
+{
+
+}
+
 void ElectSystem::merge(string source, string destination)
 {
 	if (_elections)
