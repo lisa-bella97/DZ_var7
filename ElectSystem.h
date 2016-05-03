@@ -25,6 +25,7 @@ public:
 	void addVoter(string id, string name, string pollName);
 	void removeVoter(string id);
 	void addPoll(string name);
+	void removePoll(string name);
 	void merge(string source, string destination);
 	void addCandidate(string id);
 	void removeCandidate(string id);
