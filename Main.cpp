@@ -1,28 +1,8 @@
 #include "ElectSystem.h"
 #include <sstream>
 
-vector<string> &split(const string &s, char delim, vector<string> &elems)
-{
-	stringstream ss(s);
-	string item;
-	while (getline(ss, item, delim))
-		elems.push_back(item);
-	return elems;
-}
-
-vector<string> split(const string &s, char delim)
-{
-	vector<string> elems;
-	split(s, delim, elems);
-	return elems;
-}
-
-void checkSize(int size, int requiredSize)
-{
-	if (size != requiredSize)
-		throw invalid_argument("Incorrect operation.\n");
-}
-
+vector<string> split(const string &s, char delim);
+void checkSize(int size, int requiredSize);
 void doCommand(ElectSystem& electSystem, string command);
 void getState(ElectSystem& electSystem, string fileName);
 
@@ -51,10 +31,28 @@ int main()
 	return 0;
 }
 
+vector<string> split(const string &s, char delim)
+{
+	vector<string> elems;
+	stringstream ss(s);
+	string item;
+
+	while (getline(ss, item, delim))
+		elems.push_back(item);
+
+	return elems;
+}
+
+void checkSize(int size, int requiredSize)
+{
+	if (size != requiredSize)
+		throw invalid_argument("Incorrect operation.\n");
+}
+
 void doCommand(ElectSystem& electSystem, string command)
 {
-	
 	vector<string> commands = split(command, ' ');
+
 	if (commands[0] == "load")
 	{
 		checkSize(commands.size(), 2);
@@ -68,6 +66,7 @@ void doCommand(ElectSystem& electSystem, string command)
 	else if (commands[0] == "list")
 	{
 		checkSize(commands.size(), 2);
+
 		if (commands[1] == "polls")
 			electSystem.printPolls();
 		else if (commands[1] == "voters")
@@ -79,6 +78,7 @@ void doCommand(ElectSystem& electSystem, string command)
 	}
 	else if (commands[0] == "add" && commands.size() > 2)
 	{
+
 		if (commands[1] == "voter")
 		{
 			checkSize(commands.size(), 5);
@@ -102,7 +102,7 @@ void doCommand(ElectSystem& electSystem, string command)
 	else if (commands[0] == "merge")
 	{
 		checkSize(commands.size(), 3);
-		electSystem.merge(commands[1], commands[2]); // Надо доработать
+		electSystem.merge(commands[1], commands[2]); 
 	}
 	else if (commands.size() == 2 && commands[0] == "create" && commands[1] == "elections")
 	{
@@ -129,6 +129,7 @@ void doCommand(ElectSystem& electSystem, string command)
 	}
 	else if (commands[0] == "stats")
 	{
+
 		if (commands.size() == 1)
 			electSystem.showStatistics();
 		else
@@ -140,14 +141,13 @@ void doCommand(ElectSystem& electSystem, string command)
 	else if (commands[0] == "rm" && commands.size() > 2)
 	{
 		checkSize(commands.size(), 3);
+
 		if (commands[1] == "candidate")
 			electSystem.removeCandidate(commands[2]);
 		else if (commands[1] == "voter")
 			electSystem.removeVoter(commands[2]);
-		else if (commands[1] == "poll")
-			electSystem.removePoll(commands[2]);
 		else
-			electSystem.printVotersFromPoll(commands[1]);
+			throw logic_error("Incorrect operation");
 	}
 	else
 		throw logic_error("Incorrect operation");
@@ -156,10 +156,14 @@ void doCommand(ElectSystem& electSystem, string command)
 void getState(ElectSystem & electSystem, string fileName)
 {
 	ifstream fin(fileName);
+
 	if (!fin.is_open())
 		throw runtime_error("File is not found");
+
 	string str;
 	vector<string> commands;
+	electSystem.clear();
+
 	while (getline(fin, str))
 	{
 		commands = split(str, ' ');
@@ -179,5 +183,6 @@ void getState(ElectSystem & electSystem, string fileName)
 			throw logic_error("Incorrect information in file");
 		}
 	}
+
 	fin.close();
 }
