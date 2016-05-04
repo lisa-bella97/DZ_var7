@@ -2,7 +2,7 @@
 
 //******************** Voter ***********************************
 
-void Voter::vote(Voter * candidate)
+void Voter::vote(Candidate * candidate)
 {
 	if (_candidate != nullptr)
 		throw  logic_error("No second time voting");
@@ -12,7 +12,7 @@ void Voter::vote(Voter * candidate)
 void Voter::showStatistics() const
 {
 	if (_candidate)
-		cout << _id << " chose " << _candidate->_id << endl;
+		cout << _id << " chose " << _candidate->getVoter()->_id << endl;
 	else
 		cout << _id << " has not chosen anybody" << endl;
 }
@@ -31,11 +31,6 @@ void Poll::addVoter(Voter * voter)
 	_voters.insert(pair<string, Voter*>(voter->getID(), voter));
 }
 
-void Poll::addVoter(string id, string name)
-{
-	addVoter(new Voter(id, name, this));
-}
-
 void Poll::addVoters(map<string, Voter*> voters)
 {
 	_voters.insert(voters.begin(), voters.end());
@@ -46,11 +41,6 @@ void Poll::removeVoter(string id)
 	if (_voters.count(id) == 0)
 		throw logic_error("Voter has not been found");
 	_voters.erase(id);
-}
-
-void Poll::removeVoter(Voter * voter)
-{
-	removeVoter(voter->getID());
 }
 
 void Poll::showStatistics() const
