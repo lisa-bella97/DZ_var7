@@ -8,31 +8,41 @@
 using namespace std;
 
 class Poll;
+class Voter;
 
-class Voter // Избиратель
+class Candidate
 {
 private:
-	string _id; // уникальный идентификатор избирателя
+	Voter* _voter;
+	int _votes;
+public:
+	Candidate(Voter* voter) : _voter(voter) { _votes = 0; }
+	Voter* getVoter() const { return _voter; }
+	int getVotes() const { return _votes; }
+	void increaseVotes() { _votes++; }
+};
+
+class Voter
+{
+private:
+	string _id; 
 	string _name;
 	Poll* _poll;
-	Voter* _candidate; // кандидат, за которого проголосовал избиратель
-	int _votes; //кол-во голосов, отданных за кандидата (если избиратель - кандидат)
+	Candidate* _candidate; 
 public:
-	Voter(string id, string name, Poll* poll) : _id(id), _name(name), _poll(poll) { _candidate = nullptr; _votes = 0; }
+	Voter(string id, string name, Poll* poll) : _id(id), _name(name), _poll(poll) { _candidate = nullptr; }
 	string getID() const { return _id; }
 	string getName() const { return _name; }
 	Poll* getPoll() const { return _poll; }
-	Voter* getCandidate() const { return _candidate; }
-	int getVotes() const { return _votes; }
-	void increaseVotes() { _votes++; }
+	Candidate* getCandidate() const { return _candidate; }
 	void changePoll(Poll* poll) { _poll = poll; }
-	void vote(Voter* candidate);
+	void vote(Candidate* candidate);
 	void showStatistics() const;
 	void print() const;
 	void removeCandidate() { _candidate = nullptr; }
 };
 
-class Poll // Избирательный участок
+class Poll 
 {
 private:
 	string _name;
@@ -40,10 +50,8 @@ private:
 public:
 	Poll(string name) : _name(name) { }
 	void addVoter(Voter* voter);
-	void addVoter(string id, string name);
 	void addVoters(map<string, Voter*> voters);
 	void removeVoter(string id);
-	void removeVoter(Voter* voter);
 	string getName() const { return _name; }
 	map<string, Voter*> getVoters() const { return _voters; }
 	void showStatistics() const;
