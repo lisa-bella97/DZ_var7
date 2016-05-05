@@ -32,6 +32,7 @@ public:
 	void printVotersFromPoll(string pollName) const;
 	void printVoters() const;
 	void showStatistics() const;
+	void showVoterStatistics(string id) const;
 	void showPollStatistics(string pollName) const;
 	void finishElections();
 	void stopElections();
