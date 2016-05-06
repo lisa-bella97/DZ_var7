@@ -172,16 +172,6 @@ void ElectSystem::showStatistics() const
 	}
 }
 
-void ElectSystem::showVoterStatistics(string id) const
-{
-	if (_state != prepared)
-		throw logic_error("No elections going on");
-	Voter* voter = findVoter(id);
-	if (!voter)
-		throw logic_error("Voter has not been found");
-	voter->showStatistics();
-}
-
 void ElectSystem::showPollStatistics(string pollName) const
 {
 	if (_state != prepared)
