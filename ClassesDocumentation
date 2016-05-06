@@ -108,7 +108,7 @@ Poll для каждого избирательного участка);
 19) void showPollStatistics(string pollName) const - отображение статистики конкретного избирательного
 участка;
 20) void finishElections() - завершение выборов: установка _state в prepared;
-21) void stopElections() - остановка выборного состояния: установка _state в usual;
+21) void stopElections() - остановка состояния выборов: установка _state в usual;
 22) void printFile(string fileName) const - запись информации об участках и избирателях в файл;
 23) void clear() - очистка выборов: обнуление списка кандидатов, избирательных участков и избирателей;
-24) ~ElectSystem() - дестурктор класса (те же функции, что и у clear()).
+24) ~ElectSystem() - деструктор класса.
