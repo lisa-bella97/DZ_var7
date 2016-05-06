@@ -37,7 +37,7 @@ public:
 	void stopElections();
 	void printFile(string fileName) const;
 	void clear() { _polls.clear(); _candidates.clear(); _voters.clear(); }
-	~ElectSystem() { _polls.clear(); _candidates.clear(); _voters.clear(); }
+	~ElectSystem();
 };
 
 #endif
