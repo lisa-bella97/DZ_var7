@@ -56,7 +56,7 @@ public:
 	map<string, Voter*> getVoters() const { return _voters; }
 	void showStatistics() const;
 	void printVoters() const;
-	~Poll() { _voters.clear(); }
+	~Poll(); 
 };
 
 #endif
