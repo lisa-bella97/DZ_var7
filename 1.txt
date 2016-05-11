@@ -1,0 +1,9 @@
+poll center
+poll north
+poll south
+voter a Bill center
+voter b Martin south
+voter c Rita north
+voter d Sophi center
+voter e John south
+voter f Kate center
