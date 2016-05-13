@@ -60,8 +60,5 @@ void Poll::printVoters() const
 
 Poll::~Poll()
 {
-	for (auto it = _voters.begin(); it != _voters.end(); it++)
-		delete it->second;
-
 	_voters.clear();
 }
