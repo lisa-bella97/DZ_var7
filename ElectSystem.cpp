@@ -67,10 +67,10 @@ void ElectSystem::addVoter(string id, string name, string pollName)
 void ElectSystem::addPoll(string name)
 {
 	if (_state == elections)
-		throw logic_error("Elections have just started");
+		throw runtime_error("Elections have just started");
 
 	if (findPoll(name))
-		throw logic_error("Poll with such name already exists");
+		throw runtime_error("Poll with such name already exists");
 
 	_polls.insert(pair<string, Poll*>(name, new Poll(name)));
 }
@@ -104,10 +104,14 @@ void ElectSystem::removeVoter(string id)
 	Candidate* candidate = findCandidate(id);
 
 	if (candidate && candidate->getVoter() == voter)
+	{
 		_candidates.erase(id);
+		delete candidate;
+	}
 
 	voter->getPoll()->removeVoter(id);
 	_voters.erase(id);
+	delete voter;
 }
 
 void ElectSystem::merge(string source, string destination)
@@ -132,6 +136,7 @@ void ElectSystem::merge(string source, string destination)
 
 	dest_poll->addVoters(s_voters);
 	_polls.erase(source);
+	delete s_poll;
 }
 
 void ElectSystem::removeCandidate(string id)
@@ -141,9 +146,11 @@ void ElectSystem::removeCandidate(string id)
 	else if (_state == elections)
 		throw logic_error("Elections have just started");
 
-	if (!findVoter(id))
-		throw logic_error("Voter has not been found");
-
+	auto it = _candidates.find(id);
+	
+	if (it == _candidates.end())
+		throw logic_error("Candidate has not been found");
+	delete it->second;
 	_candidates.erase(id);
 }
 
@@ -172,7 +179,7 @@ void ElectSystem::printCandidates() const
 		throw logic_error("No elections going on");
 
 	for (auto it = _candidates.begin(); it != _candidates.end(); it++)
-		cout << it->first << it->second->getVoter()->getName() << endl;
+		cout << it->first << " " << it->second->getVoter()->getName() << endl;
 }
 
 void ElectSystem::printPolls() const
@@ -260,6 +267,8 @@ void ElectSystem::stopElections()
 	for (auto it = _voters.begin(); it != _voters.end(); it++)
 		it->second->removeCandidate();
 
+	for (auto it = _candidates.begin(); it != _candidates.end(); it++)
+		delete it->second;
 	_candidates.clear();
 	_state = usual;
 }
@@ -283,11 +292,11 @@ ElectSystem::~ElectSystem()
 		delete it->second;
 	_candidates.clear();
 
-	for (auto it = _voters.begin(); it != _voters.end(); it++)
-		delete it->second;
-	_voters.clear();
-
 	for (auto it = _polls.begin(); it != _polls.end(); it++)
 		delete it->second;
 	_polls.clear();
+
+	for (auto it = _voters.begin(); it != _voters.end(); it++)
+		delete it->second;
+	_voters.clear();
 }
