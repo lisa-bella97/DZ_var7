@@ -62,15 +62,16 @@ void ElectSystem::addVoter(string id, string name, string pollName)
 	Voter* voter = new Voter(id, name, poll);
 	_voters.insert(pair<string, Voter*>(id, voter));
 	poll->addVoter(voter);
+	// Кто все-таки владеет voter? Он разрушается два раза.
 }
 
 void ElectSystem::addPoll(string name)
 {
 	if (_state == elections)
-		throw logic_error("Elections have just started");
+		throw logic_error("Elections have just started"); // это runtime, имхо
 
 	if (findPoll(name))
-		throw logic_error("Poll with such name already exists");
+		throw logic_error("Poll with such name already exists"); // это runtime, имхо
 
 	_polls.insert(pair<string, Poll*>(name, new Poll(name)));
 }
@@ -87,6 +88,7 @@ void ElectSystem::addCandidate(string id)
 	if (!voter)
 		throw logic_error("Voter has not been found");
 
+	// Два добавления одного кандидата -- memleak. Го find first
 	_candidates.insert(pair<string, Candidate*>(id, new Candidate(voter)));
 	cout << "Added: " << voter->getID() << ' ' << voter->getName() << endl;
 }
@@ -108,6 +110,7 @@ void ElectSystem::removeVoter(string id)
 
 	voter->getPoll()->removeVoter(id);
 	_voters.erase(id);
+	// memleak of voter?
 }
 
 void ElectSystem::merge(string source, string destination)
@@ -131,7 +134,7 @@ void ElectSystem::merge(string source, string destination)
 		it->second->changePoll(dest_poll);
 
 	dest_poll->addVoters(s_voters);
-	_polls.erase(source);
+	_polls.erase(source); // delete source?
 }
 
 void ElectSystem::removeCandidate(string id)
@@ -144,7 +147,7 @@ void ElectSystem::removeCandidate(string id)
 	if (!findVoter(id))
 		throw logic_error("Voter has not been found");
 
-	_candidates.erase(id);
+	_candidates.erase(id); // delete Candidate?
 }
 
 void ElectSystem::vote(string idVoter, string idCandidate)
@@ -260,7 +263,7 @@ void ElectSystem::stopElections()
 	for (auto it = _voters.begin(); it != _voters.end(); it++)
 		it->second->removeCandidate();
 
-	_candidates.clear();
+	_candidates.clear(); // утекли кандидаты
 	_state = usual;
 }
 
@@ -284,10 +287,10 @@ ElectSystem::~ElectSystem()
 	_candidates.clear();
 
 	for (auto it = _voters.begin(); it != _voters.end(); it++)
-		delete it->second;
+		delete it->second; // voter удален
 	_voters.clear();
 
 	for (auto it = _polls.begin(); it != _polls.end(); it++)
-		delete it->second;
+		delete it->second; // voter удален в poll
 	_polls.clear();
 }
