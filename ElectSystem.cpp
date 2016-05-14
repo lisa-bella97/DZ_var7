@@ -87,6 +87,10 @@ void ElectSystem::addCandidate(string id)
 	if (!voter)
 		throw logic_error("Voter has not been found");
 
+	auto it = _candidates.find(id);
+	if (it != _candidates.end())
+		throw logic_error("Candidate with such ID already exists");
+
 	_candidates.insert(pair<string, Candidate*>(id, new Candidate(voter)));
 	cout << "Added: " << voter->getID() << ' ' << voter->getName() << endl;
 }
